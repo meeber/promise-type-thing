@@ -1,0 +1,32 @@
+{
+  "name": "promise-tt",
+  "version": "0.0.0",
+  "description": "promise-based utility functions",
+  "author": "Grant Snodgrass <meeber@gametypething.com>",
+  "license": "MIT",
+  "repository": "meeber/promise-type-thing",
+  "main": "dist/utils.js",
+  "engines": {
+    "node": ">=5.0.0"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "babel-cli": "^6.6.5",
+    "babel-core": "^6.7.2",
+    "babel-plugin-lodash": "^2.2.1",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.7.0",
+    "chai": "^3.5.0",
+    "eslint": "^2.4.0",
+    "eslint-config-tt": "^0.3.0",
+    "mocha": "^2.4.5"
+  },
+  "scripts": {
+    "build": "npm run clean && babel -d dist/ src/",
+    "clean": "rm -R -f dist/ && mkdir dist",
+    "lint": "eslint .",
+    "postversion": "git push && git push --tags",
+    "preversion": "npm test",
+    "test": "mocha --require babel-core/register && npm run lint",
+    "version": "npm run build && git add -A dist"
+  }
+}
