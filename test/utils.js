@@ -1,12 +1,55 @@
 import chai from "chai";
 import chaiAsPromised from "chai-as-promised";
 import {EventEmitter} from "events";
-import {domReady, promisifyDomEvent} from "../src/utils";
+import {cancelDomEvent, domReady, promisifyDomEvent} from "../src/utils";
 
 chai.should();
 chai.use(chaiAsPromised);
 
 describe("utils", function () {
+  describe(".cancelDomEvent", function () {
+    let target, type, value;
+
+    beforeEach(function () {
+      type = "test";
+      value = {};
+
+      target = new EventEmitter();
+      target.addEventListener = target.addListener;
+      target.removeEventListener = target.removeListener;
+    });
+
+    it("should reject given promise", function () {
+      let promise = promisifyDomEvent(target, type);
+
+      cancelDomEvent(promise);
+
+      return promise.should.be.rejected;
+    });
+
+    it("should return true if promise rejected", function () {
+      let promise = promisifyDomEvent(target, type);
+
+      cancelDomEvent(promise).should.be.true;
+    });
+
+    it("should return false if promise not rejected", function () {
+      let promise = promisifyDomEvent(target, type);
+
+      target.emit(type, value);
+
+      cancelDomEvent(promise).should.be.false;
+    });
+
+    it("should remove listener upon rejecting", function () {
+      let promise = promisifyDomEvent(target, type);
+
+      target.listenerCount(type).should.equal(1);
+      cancelDomEvent(promise);
+      target.listenerCount(type).should.equal(0);
+    });
+  });
+
   describe(".domReady", function () {
     beforeEach(function () {
       global.document = new EventEmitter();
@@ -44,8 +87,8 @@ describe("utils", function () {
       value = {};
 
       target = new EventEmitter();
-      target.addEventListener = global.document.addListener;
-      target.removeEventListener = global.document.removeListener;
+      target.addEventListener = target.addListener;
+      target.removeEventListener = target.removeListener;
     });
 
     it("should resolve with value when target emits type", function () {

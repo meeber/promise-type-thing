@@ -1,3 +1,15 @@
+let domEventCancellors = new WeakMap();
+
+function cancelDomEvent (promise) {
+  if (!domEventCancellors.has(promise)) return false;
+
+  let cancellor = domEventCancellors.get(promise);
+
+  cancellor();
+
+  return true;
+}
+
 function domReady () {
   if (document.readyState === "interactive"
   || document.readyState === "complete") {
@@ -7,14 +19,23 @@ function domReady () {
   return promisifyDomEvent(document, "DOMContentLoaded");
 }
 
-// Flawed implementation: No way to cancel.
 function promisifyDomEvent (target, type) {
-  return new Promise(resolve => {
-    target.addEventListener(type, function onEvent (event) {
-      target.removeEventListener(type, onEvent);
-      resolve(event);
-    });
+  let onCancel, onEvent, promise;
+
+  function cleanUp () {
+    domEventCancellors.delete(promise);
+    target.removeEventListener(type, onEvent);
+  }
+
+  promise = new Promise((resolve, reject) => {
+    onEvent = event => { cleanUp(); resolve(event) };
+    onCancel = () => { cleanUp(); reject() };
   });
+
+  target.addEventListener(type, onEvent);
+  domEventCancellors.set(promise, onCancel);
+
+  return promise;
 }
 
-module.exports = {domReady, promisifyDomEvent};
+module.exports = {cancelDomEvent, domReady, promisifyDomEvent};
