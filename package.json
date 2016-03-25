@@ -1,6 +1,6 @@
 {
   "name": "promise-tt",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "promise-based utility functions",
   "author": "Grant Snodgrass <meeber@gametypething.com>",
   "license": "MIT",
