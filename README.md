@@ -1,3 +1,7 @@
+[![build status](https://img.shields.io/travis/meeber/promise-type-thing.svg)](https://travis-ci.org/meeber/promise-type-thing)
+[![coverage status](https://img.shields.io/coveralls/meeber/promise-type-thing.svg)](https://coveralls.io/github/meeber/promise-type-thing)
+[![npm version](https://img.shields.io/npm/v/promise-tt.svg)](https://www.npmjs.com/package/promise-tt)
+
 # PromiseTypeThing
 
 JavaScript promise-based utility functions.
