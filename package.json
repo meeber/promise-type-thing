@@ -17,10 +17,10 @@
     "babel-plugin-transform-es2015-modules-commonjs": "^6.7.4",
     "chai": "^3.5.0",
     "chai-as-promised": "^5.3.0",
-    "eslint": "^2.5.3",
-    "eslint-config-tt": "^0.5.0",
+    "eslint": "^2.6.0",
+    "eslint-config-tt": "^1.0.1",
     "mocha": "^2.4.5",
-    "uglify-js": "git+https://github.com/mishoo/UglifyJS2.git#harmony"
+    "uglify-js-harmony": "^2.6.2"
   },
   "scripts": {
     "build": "npm run clean && babel src/utils.js | uglifyjs -o dist/utils.min.js",
